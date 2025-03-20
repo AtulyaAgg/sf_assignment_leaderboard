@@ -1,66 +1,97 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Leaderboard API - Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based leaderboard API that allows users to earn points, view rankings, generate QR codes for addresses, and track winners every 5 minutes.
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- User management (add, update, delete)
+- Leaderboard with dynamic ranking
+- QR code generation using queues
+- Scheduled job to store the highest scorer every 5 minutes (avoiding ties)
+- API endpoints to interact with the system
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+## Prerequisites
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Ensure you have
+- **Docker** installed [(Install Docker)](https://docs.docker.com/engine/install/ubuntu/)
+- **Laravel Sail** installed [(Laravel sail installation)](https://laravel.com/docs/12.x/sail)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Setup & Run with Laravel Sail
+ 
+### 1. Clone the repository
+```
+git clone https://github.com/AtulyaAgg/sf_assignment_leaderboard.git
 
-## Laravel Sponsors
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 2. Copy environment file
+```
+cp .env.example .env
+```
 
-### Premium Partners
+### 3. Start Laravel Sail
+```
+./vendor/bin/sail up -d
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 4. Run Migrations
+```
+./vendor/bin/sail artisan migrate
+```
 
-## Contributing
+### 5. Seed the database (optional)
+```
+./vendor/bin/sail artisan db:seed
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 6. Run the queue worker
+```
+./vendor/bin/sail artisan queue:work
+```
 
-## Code of Conduct
+### 7. Run the scheduler
+```
+./vendor/bin/sail artisan schedule:work
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+## API Endpoints
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Method | Endpoint | Description |
+|----------|----------|----------|
+| GET | /api/leaderboard | Fetch all users ordered by points |
+| POST | /api/users | Add a new user |
+| DELETE | /api/users/{id} | Delete a user |
+| PATCH | /api/users/{id}/points | Increment/Decrement user points |
+| GET | /api/users/{id} | Fetch user details |
+| POST | /api/reset-scores | Reset all scores |
+| GET | /api/users-grouped | Get users grouped by score with average age |
+| GET | /api/winners | Fetch the recorded winners |
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Additional Commands
+
+### -Clear Cache
+```
+./vendor/bin/sail artisan cache:clear
+```
+
+### -Run Tests:
+```
+./vendor/bin/sail artisan test
+```
+
+### -Tinker (for debugging):
+```
+./vendor/bin/sail artisan tinker
+```
+
+
+
+
+
+
+
