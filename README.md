@@ -2,6 +2,7 @@
 
 A Laravel-based leaderboard API that allows users to earn points, view rankings, generate QR codes for addresses, and track winners every 5 minutes.
 
+**Note - We have used laravel sail to setup local environemnt**
 
 ## Features
 
