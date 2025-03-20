@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/leaderboard', [LeaderboardController::class, 'getLeaderboard']);
+Route::post('/users', [LeaderboardController::class, 'addUser']);
+Route::delete('/users/{id}', [LeaderboardController::class, 'deleteUser']);
+Route::patch('/users/{id}/points', [LeaderboardController::class, 'updatePoints']);
+Route::get('/users/{id}', [LeaderboardController::class, 'getUserDetails']);
+Route::post('/reset-scores', [LeaderboardController::class, 'resetScores']);
+Route::get('/users-grouped', [LeaderboardController::class, 'getUsersGroupedByScore']);
+
