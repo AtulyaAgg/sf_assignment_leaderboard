@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class User extends Model {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['name', 'age', 'address', 'points'];
+    protected $fillable = ['name', 'age', 'address', 'points', 'qr_code'];
 
     public function winners() {
         return $this->hasMany(Winner::class);

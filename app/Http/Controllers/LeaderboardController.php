@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Jobs\GenerateQrCodeJob;
+use Illuminate\Routing\Controller;
 
 class LeaderboardController extends Controller {
     public function getLeaderboard() {
@@ -16,8 +18,11 @@ class LeaderboardController extends Controller {
             'age' => 'required|integer',
             'address' => 'required|string'
         ]);
-
+    
         $user = User::create($validated);
+        
+        GenerateQrCodeJob::dispatch($user);
+    
         return response()->json($user, 201);
     }
 
@@ -35,7 +40,15 @@ class LeaderboardController extends Controller {
     }
 
     public function getUserDetails($id) {
-        return response()->json(User::findOrFail($id));
+
+        $user = User::findOrFail($id);
+        return response()->json([
+            'name' => $user->name,
+            'age' => $user->age,
+            'points' => $user->points,
+            'address' => $user->address,
+            'qr_code' => $user->qr_code ? asset("storage/{$user->qr_code}") : null,
+        ]);
     }
 
     public function resetScores() {

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LeaderboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +22,8 @@ Route::patch('/users/{id}/points', [LeaderboardController::class, 'updatePoints'
 Route::get('/users/{id}', [LeaderboardController::class, 'getUserDetails']);
 Route::post('/reset-scores', [LeaderboardController::class, 'resetScores']);
 Route::get('/users-grouped', [LeaderboardController::class, 'getUsersGroupedByScore']);
+
+Route::get('/winners', function () {
+    return response()->json(\App\Models\Winner::with('user')->latest()->get());
+});
 
